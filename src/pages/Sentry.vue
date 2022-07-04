@@ -2,8 +2,8 @@
   <div class="flex mx-auto w-full h-full">
     <!-- submit button -->
     <button
-      @click="handleSubmit"
       class="bg-primary hover:bg-primary-hover text-white font-bold shadow-xl uppercase text-lg mx-auto p-4 mt-4 rounded disabled:opacity-50 btn"
+      @click="handleSubmit"
     >
       Click to trigger error
     </button>
@@ -14,7 +14,7 @@
 export default {
   name: "Sentry",
   created() {
-    console.log('sentry');
+    console.log("sentry");
   },
   methods: {
     async handleSubmit() {

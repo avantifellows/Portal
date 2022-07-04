@@ -137,10 +137,6 @@ export default {
       addSvg: assets.addSvg,
     };
   },
-  created() {
-    /** The user type is set as soon as component is created */
-    this.userType = this.groupData.userType;
-  },
   computed: {
     /** Returns the input mode stored against the group */
     inputMode() {
@@ -274,6 +270,10 @@ export default {
     submitButtonDisplayText() {
       return this.groupData.text.default.submitButton;
     },
+  },
+  created() {
+    /** The user type is set as soon as component is created */
+    this.userType = this.groupData.userType;
   },
   methods: {
     /** Determines how the input box should look.

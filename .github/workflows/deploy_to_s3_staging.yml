@@ -16,49 +16,52 @@ jobs:
       url: "https://staging-auth.avantifellows.org"
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
 
-    - name: Cache node modules
-      uses: actions/cache@v1
-      with:
-        path: node_modules
-        key: ${{ runner.OS }}-build-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.OS }}-build-
-          ${{ runner.OS }}-
+      - name: Cache node modules
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{ runner.OS }}-build-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-build-
+            ${{ runner.OS }}-
 
-    - name: Install
-      run: npm install
+      - name: Install
+        run: npm install
 
-    # build the vuepress docs
-    - name: Build
-      env:
-        NODE_ENV: staging
-        VITE_APP_PLIO_AF_API_KEY: ${{ secrets.VITE_APP_PLIO_AF_API_KEY }}
-        VITE_APP_BASE_URL_PLIO: 'https://staging-app.plio.in/#/af/play/'
-        VITE_APP_QUIZ_AF_API_KEY: ${{ secrets.VITE_APP_QUIZ_AF_API_KEY }}
-        VITE_APP_BASE_URL_QUIZ: 'https://staging-quiz.avantifellows.org/quiz/'
-        VITE_APP_AWS_ACCESS_KEY_ID: ${{ secrets.VITE_APP_AWS_SQS_ACCESS_KEY }}
-        VITE_APP_AWS_SECRET_KEY: ${{ secrets.VITE_APP_AWS_SQS_SECRET_KEY }}
-        VITE_APP_BASE_URL_MEET: 'https://meet.google.com/'
-        VITE_APP_OTP_SERVICE: ${{ secrets.VITE_APP_OTP_SERVICE }}
-        VITE_APP_AWS_REGION: ${{ secrets.VITE_APP_AWS_REGION }}
-        VITE_APP_AWS_SQS_URL: ${{ secrets.VITE_APP_AWS_SQS_URL }}
-        VITE_APP_BASE_URL_YOUTUBE: 'https://www.youtube.com/watch?v='
-        VITE_APP_CHECK_USER_ENDPOINT: '/checkForUser'
-        VITE_APP_GET_GROUP_ENDPOINT: '/getGroupData'
-        VITE_APP_CLOUD_FUNCTIONS_BASE_URL: 'https://asia-south1-staging-portal-7df0f.cloudfunctions.net'
+      - name: Code Linting
+        run: npm run lint
 
-      run: npm run build
+      # build the vuepress docs
+      - name: Build
+        env:
+          NODE_ENV: staging
+          VITE_APP_PLIO_AF_API_KEY: ${{ secrets.VITE_APP_PLIO_AF_API_KEY }}
+          VITE_APP_BASE_URL_PLIO: "https://staging-app.plio.in/#/af/play/"
+          VITE_APP_QUIZ_AF_API_KEY: ${{ secrets.VITE_APP_QUIZ_AF_API_KEY }}
+          VITE_APP_BASE_URL_QUIZ: "https://staging-quiz.avantifellows.org/quiz/"
+          VITE_APP_AWS_ACCESS_KEY_ID: ${{ secrets.VITE_APP_AWS_SQS_ACCESS_KEY }}
+          VITE_APP_AWS_SECRET_KEY: ${{ secrets.VITE_APP_AWS_SQS_SECRET_KEY }}
+          VITE_APP_BASE_URL_MEET: "https://meet.google.com/"
+          VITE_APP_OTP_SERVICE: ${{ secrets.VITE_APP_OTP_SERVICE }}
+          VITE_APP_AWS_REGION: ${{ secrets.VITE_APP_AWS_REGION }}
+          VITE_APP_AWS_SQS_URL: ${{ secrets.VITE_APP_AWS_SQS_URL }}
+          VITE_APP_BASE_URL_YOUTUBE: "https://www.youtube.com/watch?v="
+          VITE_APP_CHECK_USER_ENDPOINT: "/checkForUser"
+          VITE_APP_GET_GROUP_ENDPOINT: "/getGroupData"
+          VITE_APP_CLOUD_FUNCTIONS_BASE_URL: "https://asia-south1-staging-portal-7df0f.cloudfunctions.net"
 
-    - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_S3_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_S3_SECRET_ACCESS_KEY }}
-        aws-region: ap-south-1
+        run: npm run build
 
-    # sync with the given S3 bucket
-    - name: Deploy static site to S3 bucket
-      run: aws s3 sync ./dist s3://af-auth-layer-staging --delete --acl public-read
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_S3_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_S3_SECRET_ACCESS_KEY }}
+          aws-region: ap-south-1
+
+      # sync with the given S3 bucket
+      - name: Deploy static site to S3 bucket
+        run: aws s3 sync ./dist s3://af-auth-layer-staging --delete --acl public-read

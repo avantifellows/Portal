@@ -6,9 +6,10 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite build && vite preview",
-    "lint": "vite lint",
     "deploy-staging": "vite build --mode staging && aws --profile af-s3-bot --region ap-south-1 s3 sync ./dist s3://af-auth-layer-staging --delete --acl public-read",
-    "deploy": "vite build && aws --profile af-s3-bot --region ap-south-1 s3 sync ./dist s3://af-auth-layer --delete --acl public-read"
+    "deploy": "vite build && aws --profile af-s3-bot --region ap-south-1 s3 sync ./dist s3://af-auth-layer --delete --acl public-read",
+    "lint": "eslint --ext .js,.vue --ignore-path .gitignore --fix src",
+    "format": "prettier .  --write"
   },
   "dependencies": {
     "@aws-sdk/client-sqs": "^3.30.0",
@@ -33,10 +34,12 @@
     "@vitejs/plugin-vue": "^1.6.1",
     "@vue/compiler-sfc": "^3.0.0",
     "eslint": "^8.13.0",
+    "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-vue": "^8.6.0",
-    "prettier": "^2.6.2",
-    "vite": "2.5.10"
+    "prettier": "2.7.1",
+    "vite": "2.5.10",
+    "vite-plugin-eslint": "^1.6.1"
   },
   "browserslist": [
     "> 1%",

@@ -23,9 +23,9 @@
 
     <!--text box to enter phone number-->
     <div
-      class="flex flex-row justify-center"
       v-for="(phoneNumberObject, index) in phoneNumberList"
       :key="`idInput-${index}`"
+      class="flex flex-row justify-center"
     >
       <input
         v-model="phoneNumberObject.userID"
@@ -34,23 +34,23 @@
         pattern="[0-9]*"
         :placeholder="inputBoxPlaceholderText"
         required
-        @keypress="isValidPhoneNumber($event)"
         class="border-2 rounded-sm p-4 mx-auto border-gray-500 focus:border-gray-800 focus:outline-none"
         :class="selectInputBoxClasses"
-        @input="updatePhoneNumber($event)"
         :disabled="isPhoneNumberNotEditable"
+        @keypress="isValidPhoneNumber($event)"
+        @input="updatePhoneNumber($event)"
       />
     </div>
 
     <!-- invalid input message  -->
     <span
-      class="mx-auto text-red-700 text-base mb-1 px-2"
       v-if="isInvalidPhoneNumberMessageShown"
+      class="mx-auto text-red-700 text-base mb-1 px-2"
       >{{ invalidPhoneNumberMessage }}</span
     >
 
     <!--text box to enter OTP-->
-    <div class="flex flex-col justify-center" v-if="isOTPSent">
+    <div v-if="isOTPSent" class="flex flex-col justify-center">
       <p
         class="text-md sm:text-l md:text-l lg:text-xl xl:text-2xl mx-auto font-bold px-6"
       >
@@ -64,19 +64,19 @@
 
     <!-- button to request for OTP -->
     <button
-      @click="sendOTP"
+      v-show="!isOTPSent"
       class="bg-primary hover:bg-primary-hover text-white uppercase text-lg mx-auto p-4 mt-4 disabled:opacity-50"
       :disabled="isRequestOTPButtonDisabled"
-      v-show="!isOTPSent"
+      @click="sendOTP"
     >
       {{ requestOTPButtonDisplayText }}
     </button>
 
     <!-- button to resend OTP -->
     <button
-      @click="sendOTP"
-      class="bg-primary hover:bg-primary-hover text-white uppercase text-lg mx-auto p-4 mt-4 disabled:opacity-50"
       v-show="isCountdownFinished"
+      class="bg-primary hover:bg-primary-hover text-white uppercase text-lg mx-auto p-4 mt-4 disabled:opacity-50"
+      @click="sendOTP"
     >
       {{ resendOTPButtonText }}
     </button>
@@ -95,9 +95,9 @@
     <!-- submit button -->
     <button
       v-show="isOTPSent"
-      @click="verifyOTP"
       class="bg-primary hover:bg-primary-hover text-white font-bold shadow-xl uppercase text-lg mx-auto p-4 mt-4 rounded disabled:opacity-50 btn"
       :disabled="isSubmitButtonDisabled"
+      @click="verifyOTP"
     >
       {{ submitButtonDisplayText }}
     </button>
