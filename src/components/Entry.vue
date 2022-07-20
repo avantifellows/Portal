@@ -14,7 +14,10 @@
     :class="{ 'opacity-20 pointer-events-none': isLoading }"
   >
     <!-- title -->
-    <p class="text-xl sm:text-2xl md:text-2xl lg:text-3xl xl:text-4xl mx-auto font-bold">
+    <p
+      class="text-xl sm:text-2xl md:text-2xl lg:text-3xl xl:text-4xl mx-auto font-bold"
+      data-cy="displayTitle"
+    >
       {{ inputBoxDisplayTitle }}
     </p>
     <!-- input options and delete options icon -->

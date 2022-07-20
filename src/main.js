@@ -12,7 +12,7 @@ const app = createApp(App)
   .use(router)
   .use(store);
 
-if (["staging", "production"].includes(import.meta.env.MODE)) {
+if (["development", "staging", "production"].includes(import.meta.env.MODE)) {
   Sentry.init({
     app,
     dsn: import.meta.env.VITE_APP_SENTRY_DSN,
